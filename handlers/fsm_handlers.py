@@ -20,9 +20,8 @@ async def request_for_gpt(message: Message, bot: Bot, state: FSMContext):
         chat_id=message.from_user.id,
         action=ChatAction.TYPING,
     )
-    request = message.text
     messages = ChatGPTMessage(resource.prompts['gpt'])
-    messages.update(GPTRole.USER, request)
+    messages.update(GPTRole.USER, message.text)
     response = await gpt_client.request(messages)
     await bot.send_photo(
         chat_id=message.from_user.id,
@@ -31,12 +30,6 @@ async def request_for_gpt(message: Message, bot: Bot, state: FSMContext):
     )
     await state.clear()
 
-
-# def print_history(history: list[dict[str, str]]):
-#     for entry in history:
-#         for role, message in entry.items():
-#             print(f'{role}: {message}')
-#         print()
 
 @fsm_router.message(GPTTalk.wait_for_answer)
 async def question_for_celebrity(message: Message, bot: Bot, state: FSMContext):
@@ -52,7 +45,6 @@ async def question_for_celebrity(message: Message, bot: Bot, state: FSMContext):
     messages.update(GPTRole.USER, message.text)
     response = await gpt_client.request(messages)
     messages.update(GPTRole.CHAT, response)
-    # print_history(messages.message_list)
     await bot.send_photo(
         chat_id=message.from_user.id,
         photo=resource.images[data['resource']],

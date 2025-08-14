@@ -22,7 +22,7 @@ def ikb_next_random():
         callback_data=RandomGPT(
             button='random',
             value='stop'
-        )
+        ),
     )
     return keyboard.as_markup()
 
@@ -72,7 +72,7 @@ def ikb_quiz_select():
             text=button.text,
             callback_data=QuizGPT(
                 button='quiz',
-                subject=button.callback
+                subject=button.callback,
             ),
         )
     keyboard.adjust(1)

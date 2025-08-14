@@ -12,41 +12,22 @@ from .fsm_states import GPTRequest
 
 command_router = Router()
 
-# @command_router.message(Command('start'))
-# async def com_start_handler(message: Message):
-#     reader = Reader(
-#         enums.ResourcePath.RESOURCE_DIR.value / enums.ResourcePath.MESSAGES_DIR.value / enums.ResourceFileName.MAIN_MESSAGE.value
-#     )
-#     message_text = await reader.load()
-#     await message.answer(
-#         text=message_text,
-#         reply_markup=kb_main_menu()
-#     )
 
 @command_router.message(Command('start'))
 async def com_start_handler(message: Message, bot: Bot):
     await bot.send_photo(
         chat_id=message.from_user.id,
-        photo = resource.images['main'],
-        caption= resource.messages['main'],
+        photo=resource.images['main'],
+        caption=resource.messages['main'],
         reply_markup=kb_main_menu(),
     )
 
-# @command_router.message(Command('random'))
-# async def random_handler(message: Message):
-#     gpt_client = ChatGPT()
-#     message_list = ChatGPTMessage('random')
-#     await  message_list.init_message()
-#     response = await gpt_client.request(message_list)
-#     await message.answer(
-#         text=response,
-#     )
 
 @command_router.message(Command('random'))
 async def random_handler(message: Message, bot: Bot):
     await bot.send_chat_action(
         chat_id=message.from_user.id,
-        action= ChatAction.TYPING,
+        action=ChatAction.TYPING,
     )
     gpt_client = ChatGPT()
     message_list = ChatGPTMessage(resource.prompts['random'])
@@ -58,6 +39,7 @@ async def random_handler(message: Message, bot: Bot):
         reply_markup=ikb_next_random(),
     )
 
+
 @command_router.message(Command('gpt'))
 async def gpt_command(message: Message, bot: Bot, state: FSMContext):
     await state.set_state(GPTRequest.wait_for_requests)
@@ -66,6 +48,7 @@ async def gpt_command(message: Message, bot: Bot, state: FSMContext):
         photo=resource.images['gpt'],
         caption=resource.messages['gpt']
     )
+
 
 @command_router.message(Command('talk'))
 async def talk_command(message: Message, bot: Bot):

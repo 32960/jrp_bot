@@ -63,7 +63,7 @@ async def quiz_answer(message: Message, state: FSMContext):
     response = await gpt_client.request(message_list)
     my_score = data['score'] + 1 if response == 'Правильно!' else data['score']
     message_list.update(GPTRole.CHAT, response)
-    message_text = f'Ваш счет: {data['score']}\n{response}'
+    message_text = f'Ваш счет: {my_score}\n{response}'
     await message.answer(
         text=message_text,
         reply_markup=ikb_quiz_menu(),
